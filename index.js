@@ -51,15 +51,23 @@ function propertyIsUnsafe(target, key) {
 			&& Object.propertyIsEnumerable.call(target, key)) // and also unsafe if they're nonenumerable.
 }
 
+// Assigning `__proto__` on a plain object replaces its prototype instead of adding a key.
+function keyIsPrototypeSetter(key) {
+	return key === '__proto__'
+}
+
 function mergeObject(target, source, options) {
 	var destination = {}
 	if (options.isMergeableObject(target)) {
 		getKeys(target).forEach(function(key) {
+			if (keyIsPrototypeSetter(key)) {
+				return
+			}
 			destination[key] = cloneUnlessOtherwiseSpecified(target[key], options)
 		})
 	}
 	getKeys(source).forEach(function(key) {
-		if (propertyIsUnsafe(target, key)) {
+		if (keyIsPrototypeSetter(key) || propertyIsUnsafe(target, key)) {
 			return
 		}
 

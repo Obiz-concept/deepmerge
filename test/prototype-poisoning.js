@@ -11,6 +11,23 @@ test('merging objects with own __proto__', function(t) {
 	t.end()
 })
 
+test('merging a target with own __proto__', function(t) {
+	var malicious = JSON.parse('{ "__proto__": { "admin": true } }')
+	var mergedObject = merge(malicious, {})
+	t.equal(Object.getPrototypeOf(mergedObject), Object.prototype, 'the destination should keep Object.prototype')
+	t.notOk(mergedObject.admin, 'the destination should have an unmodified prototype')
+	t.end()
+})
+
+test('merging own __proto__ into a null-prototype target', function(t) {
+	var target = Object.create(null)
+	var malicious = JSON.parse('{ "__proto__": { "admin": true } }')
+	var mergedObject = merge(target, malicious)
+	t.equal(Object.getPrototypeOf(mergedObject), Object.prototype, 'the destination should keep Object.prototype')
+	t.notOk(mergedObject.admin, 'the destination should have an unmodified prototype')
+	t.end()
+})
+
 test('merging objects with plain and non-plain properties', function(t) {
 	var plainSymbolKey = Symbol('plainSymbolKey')
 	var parent = {

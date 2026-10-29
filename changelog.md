@@ -1,3 +1,8 @@
+# 4.3.2 (Obiz-concept fork)
+
+- Skip `__proto__` keys in `mergeObject()`, on the target and on the source: [GHSA-gcqx-w48m-w2h4](https://github.com/advisories/GHSA-gcqx-w48m-w2h4).
+- Commit `dist/`: this fork is installed from git, where nothing builds it.
+
 # [4.3.1](https://github.com/TehShrike/deepmerge/releases/tag/v4.3.1)
 
 - Fix type definition for arrayMerge options.  [#239](https://github.com/TehShrike/deepmerge/pull/239)
